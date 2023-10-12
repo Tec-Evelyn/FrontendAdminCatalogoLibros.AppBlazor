@@ -1,9 +1,83 @@
-﻿@page "/"
+﻿@layout LoginLayout
+@page "/"
 
-<PageTitle>Index</PageTitle>
+@inject NavigationManager NavigationManager
+@inject ILocalStorageService _localStorageService
+@inject HttpClient Http
 
-<h1>Hello, world!</h1>
+<MudImage ObjectFit="ObjectFit.Contain" Src="/images/fullcolor.png" Width="200" Height="150" Alt="Swedish Farm House" Elevation="0" Class="rounded-lg ma-4" />
+<MudPaper Class="pa-2 ma-4" Elevation="0">
+    <EditForm Model="@user" OnValidSubmit="OnValidSubmit">
+        <DataAnnotationsValidator /> @*Si dejo un campo vacio me dara error*@
+        <MudGrid>
+            <MudItem xs="12">
+                <MudTextField Label="Usuario" Class="mt-3"
+                              @bind-Value="user.Login" For="@(() => user.Login)" />
+            </MudItem>
+            <MudItem xs="12">
+                <MudTextField Label="Clave" Class="mt-3"
+                              @bind-Value="user.Password" For="@(() => user.Password)" InputType="InputType.Password" />
+            </MudItem>
+            <MudItem xs="12"> @*un botón submit envia un formulario*@
+                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Login</MudButton>               
+            </MudItem>
+        </MudGrid>
+    </EditForm>
+    @if (showLeaveAlert)
+    {
+        <MudAlert Severity="Severity.Error" ContentAlignment="HorizontalAlignment.Center" ShowCloseIcon="true" CloseIconClicked="(() => CloseMe(true))">No se reconocen las credenciales ingresadas.</MudAlert>
+    }
+</MudPaper>
 
-Welcome to your new app.
+@code {
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+    [CascadingParameter]
+    private Task<AuthenticationState> authenticationStateTask { get; set; }
+    private bool showLeaveAlert = false;
+
+    UserLogin user = new UserLogin();
+    bool success;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await authenticationStateTask;
+        var user = authState.User;
+        if (user.Identity != null)
+        {
+            if (user.Identity.IsAuthenticated)
+            {
+                NavigationManager.NavigateTo($"/home"); /*muestra el formulario de inicio de sesión*/
+            }
+        }
+    }
+
+    protected async Task OnValidSubmit() /*Metodo que realiza la petición de la API*/
+    {
+        var httpResponse = await Http.PostAsJsonAsync<UserLogin>("usuario/login", user);
+          //Si el StatusCode no es de 200 (Correcto) se muestra la alerta
+        if (!(httpResponse.StatusCode == System.Net.HttpStatusCode.OK))
+        {
+            showLeaveAlert = true;
+        }
+        else
+        {
+            var contentResponse = await httpResponse.Content.ReadAsStringAsync();
+            var token = contentResponse; /*es la variable token y mete la respuesta del token*/
+            if (token != null)
+            {
+                await _localStorageService.SetItemAsync("token", token);
+                NavigationManager.NavigateTo($"home", forceLoad: true); /*forceLoad por obligacion me dirige a esta pagina(Home)*/
+            }
+            else
+            {
+                showLeaveAlert = true;
+            }
+        }            
+    }
+
+    private void CloseMe(bool value)
+    {
+        showLeaveAlert = false;
+    }
+}
