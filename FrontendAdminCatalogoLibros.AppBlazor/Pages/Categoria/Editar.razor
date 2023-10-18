@@ -1,5 +1,67 @@
-﻿<h3>Editar</h3>
+﻿@page "/categoria/editar/{id:int}"
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+@inject ILocalStorageService _localStorageService
 
-@code {
+@*<MudText Typo="Typo.h2" Class="ml">Editar Categoria</MudText>
+*@
+<MudGrid>
 
+     <MudItem xs="12" sm="7">
+        <MudPaper Class="pa-4">
+            <EditForm Model="categoria" OnValidSubmit="OnValidSubmit">
+                <DataAnnotationsValidator />
+                <MudCard>
+                    <MudCardContent>
+                        <MudTextField Label="Nombre" @bind-Value="categoria.Nombre" For="@(() => categoria.Nombre)" />
+                    </MudCardContent>
+                    <MudCardActions>
+                        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Guardar cambios</MudButton>
+                    </MudCardActions>
+                </MudCard>
+            </EditForm>
+            @if (showLeaveAlert)
+            {
+                <MudAlert Severity="Severity.Error" ContentAlignment="HorizontalAlignment.Center" ShowCloseIcon="true" CloseIconClicked="(() => CloseMe(true))">No se pudo guardar.</MudAlert>
+            }
+        </MudPaper>
+    </MudItem>
+
+</MudGrid>
+
+@code{
+    [Parameter]
+    public int id { get; set; }
+    private bool showLeaveAlert = false;
+    Categoria categoria = new Categoria();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Http.DefaultRequestHeaders.Authorization =
+        new AuthenticationHeaderValue("Bearer", await _localStorageService.GetItemAsync<string>("token"));
+        var resp = await Http.GetStringAsync("categoria/" + id);
+        categoria = JsonSerializer.Deserialize<Categoria>(resp, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+    }
+    private async Task OnValidSubmit(EditContext context)
+    {
+        await saveChanges();
+    }
+
+    private async Task saveChanges()
+    {
+        var httpResponse = await Http.PutAsJsonAsync<Categoria>("categoria/" + categoria.Id, categoria);
+
+        if (!(httpResponse.StatusCode == System.Net.HttpStatusCode.OK))
+        {
+            showLeaveAlert = true;
+        }
+        else
+        {
+            NavigationManager.NavigateTo("categoria/index");
+        }
+    }
+    private void CloseMe(bool value)
+    {
+        showLeaveAlert = false;
+    }
 }

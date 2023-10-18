@@ -1,5 +1,116 @@
-﻿<h3>Agregar</h3>
+﻿@page "/libro/agregar"
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+@inject ILocalStorageService _localStorageService
 
-@code {
+@*<MudText Typo="Typo.h2" Class="ml">Nuevo Libro</MudText>
+*@
+<MudGrid>
 
+    <MudItem xs="12" sm="7">
+        <MudPaper Class="pa-4">
+            <EditForm Model="libro" OnValidSubmit="OnValidSubmit">
+                <DataAnnotationsValidator />
+                <MudCard>
+                    <MudCardContent>
+
+                        <MudTextField Label="Nombre" @bind-Value="libro.Nombre" For="@(() => libro.Nombre)" />
+                        <MudTextField Label="Descripcion" @bind-Value="libro.Descripcion" For="@(() => libro.Descripcion)" />
+                        <MudTextField Label="Imagen" @bind-Value="libro.Imagen" For="@(() => libro.Imagen)" />  
+                        <MudTextField Label="Numero de Paginas" @bind-Value="libro.NumPaginas" For="@(() => libro.NumPaginas)" />  
+                        <MudTextField Label="Fecha Publicacion" @bind-Value="libro.FechaPublicacion" For="@(() => libro.FechaPublicacion)" />  
+                        <MudTextField Label="Contenido" @bind-Value="libro.Contenido" For="@(() => libro.Contenido)" />  
+                           @*Relacion con llaves foranea Categoria*@
+                        <MudSelect Variant="Variant.Outlined" Label="Categoria" AnchorOrigin="Origin.BottomCenter"
+                                   @bind-Value="libro.IdCategoria" For="@(() => libro.IdCategoria)">
+                            @foreach(var item in categorias){
+                                <MudSelectItem Value="@item.Id">@item.Nombre</MudSelectItem>
+                            }
+                        </MudSelect>
+
+                         @*Relacion con llaves foranea Genero*@
+                        <MudSelect Variant="Variant.Outlined" Label="Genero" AnchorOrigin="Origin.BottomCenter"
+                                   @bind-Value="libro.IdGenero" For="@(() => libro.IdGenero)">
+                            @foreach(var item in generos){
+                                <MudSelectItem Value="@item.Id">@item.Nombre</MudSelectItem>
+                            }
+                        </MudSelect>
+
+                         @*Relacion con llaves foranea Autor*@
+                        <MudSelect Variant="Variant.Outlined" Label="Autor" AnchorOrigin="Origin.BottomCenter"
+                                   @bind-Value="libro.IdAutor" For="@(() => libro.IdAutor)">
+                            @foreach(var item in autores){
+                                <MudSelectItem Value="@item.Id">@item.Nombre</MudSelectItem>
+                            }
+                        </MudSelect>
+                        
+                    </MudCardContent>
+
+                    <MudCardActions>
+                        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Guardar</MudButton>
+                    </MudCardActions>
+                </MudCard>
+            </EditForm>
+            @if (showLeaveAlert)
+            {
+                <MudAlert Severity="Severity.Error" ContentAlignment="HorizontalAlignment.Center" ShowCloseIcon="true" CloseIconClicked="(() => CloseMe(true))">No se pudo guardar.</MudAlert>
+            }
+        </MudPaper>
+    </MudItem>
+
+</MudGrid>
+
+@code{
+    private IEnumerable<Categoria> categorias = new List<Categoria>();
+    private IEnumerable<Autor> autores = new List<Autor>();
+    private IEnumerable<Genero> generos = new List<Genero>();
+    private bool showLeaveAlert = false;
+    Libro libro = new Libro();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Http.DefaultRequestHeaders.Authorization =
+            new AuthenticationHeaderValue("Bearer", await _localStorageService.GetItemAsync<string>("token"));
+        await getCategorias();
+        await getAutores();
+        await getGeneros();
+    }
+
+    private async Task OnValidSubmit(EditContext context)
+    {
+        await save();
+    }
+
+    private async Task save()
+    {
+        var httpResponse = await Http.PostAsJsonAsync<Libro>("libro", libro);
+
+        if (!(httpResponse.StatusCode == System.Net.HttpStatusCode.OK))
+        {
+            showLeaveAlert = true;
+        }
+        else
+        {
+            NavigationManager.NavigateTo("libro/index");
+        }
+    }
+
+    private void CloseMe(bool value)
+    {
+        showLeaveAlert = false;
+    }
+
+    private async Task getCategorias(){
+        var httpResponse = await Http.GetStringAsync("categoria");
+        categorias = JsonSerializer.Deserialize<IEnumerable<Categoria>>(httpResponse, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+    }
+     private async Task getAutores(){
+        var httpResponse = await Http.GetStringAsync("autor");
+        autores = JsonSerializer.Deserialize<IEnumerable<Autor>>(httpResponse, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+    }
+    private async Task getGeneros(){ 
+        var httpResponse = await Http.GetStringAsync("genero"); 
+        generos = JsonSerializer.Deserialize<IEnumerable<Genero>>(httpResponse, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+    }
 }

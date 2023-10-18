@@ -8,7 +8,11 @@ namespace FrontendAdminCatalogoLibros.AppBlazor.Models
 
         [Required(ErrorMessage = "El nombre es requerido")]
         public string Nombre { get; set; }
-
+        public int IdCategoria { get; set; }
+        [Required(ErrorMessage = "El nombre es requerido")]
+        public int IdAutor { get; set; }
+        [Required(ErrorMessage = "El nombre es requerido")]
+        public int IdGenero { get; set; }
 
         [Required(ErrorMessage = "La imagen es requerida")]
         public string Imagen { get; set; }
@@ -24,7 +28,7 @@ namespace FrontendAdminCatalogoLibros.AppBlazor.Models
 
         [Required(ErrorMessage = "La descripción es requerida")]
         public string Descripcion { get; set; }
-
+        public string Contenido { get; set; }
 
         public Autor Autor { get; set; }
         public Categoria Categoria { get; set; }

@@ -1,5 +1,90 @@
-﻿<h3>Index</h3>
+﻿@page "/libro/index"
+@inject HttpClient httpClient
+@inject NavigationManager NavigationManager
 
-@code {
+@*<MudText Typo="Typo.h2" Class="ml">Nuevo Libro</MudText>*@
 
+<MudTable Items="@libros" Hover="true" Bordered="true" Striped="true">
+    <ToolBarContent>
+        <MudFab Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" OnClick="goAdd" />
+        <MudSpacer />
+        <MudTextField @bind-Value="searchText" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+    </ToolBarContent>
+
+    <HeaderContent>
+        <MudTh>Id</MudTh>
+        <MudTh>IdAutor</MudTh>
+        <MudTh>IdCategoria</MudTh>
+        <MudTh>IdGenero</MudTh>
+        <MudTh>Nombre</MudTh>
+      @* <MudTh>Descripción</MudTh>*@
+        <MudTh>Acciones</MudTh>
+    </HeaderContent>
+
+    <RowTemplate>
+        <MudTd DataLabel="Id">@context.Id</MudTd>
+        <MudTd DataLabel="Autor">@context.Autor.Nombre</MudTd>
+        <MudTd DataLabel="Categoria">@context.Categoria.Nombre</MudTd>
+         <MudTd DataLabel="Genero">@context.Genero.Nombre</MudTd>
+         <MudTd DataLabel="Nombre">@context.Nombre</MudTd>
+       @* <MudTd DataLabel="Descripcion">@context.Descripcion</MudTd>*@
+
+        <MudTd>
+            <MudButton Link="@($"/libro/editar/{context.Id}")" Size="Size.Small" Variant="Variant.Outlined" Color="Color.Tertiary"
+                       Class="text-center">Editar</MudButton>
+            <MudButton Link="@($"/libro/eliminar/{context.Id}")" Size="Size.Small" Variant="Variant.Outlined" Color="Color.Warning"
+                       Class="text-center">Eliminar</MudButton>
+        </MudTd>
+
+    </RowTemplate>
+
+    <PagerContent>
+        <MudTablePager />
+    </PagerContent>
+</MudTable>
+
+
+@code{
+    private IEnumerable<Libro> libros = new List<Libro>();
+    private string searchText = "";
+    private Libro libro = new Libro();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await getAll();
+    }
+
+    private async Task getAll()
+    {
+        var httpResponse = await httpClient.PostAsJsonAsync("libro/buscar", libro);
+        string respString = await httpResponse.Content.ReadAsStringAsync();
+        libros = JsonSerializer.Deserialize<IEnumerable<Libro>>(respString, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+    }
+
+    private void goAdd()
+    {
+        NavigationManager.NavigateTo("libro/agregar");
+    }
 }
+@*<style>
+    .mud-fab{
+        background:blue;
+        color:white;       
+    }
+    .mud-fab:hover{
+         background:white;
+        color:blue; 
+    }
+</style>*@
+
+@*<style>
+     .mud-button{
+        background:yellow;
+        color:#fff;
+        height:35px;
+        width:6px;
+        border-color:black;
+        border-radius:6px;
+        margin-top:25px;
+    }
+</style>*@
