@@ -12,19 +12,20 @@
                 <DataAnnotationsValidator />
                 <MudCard>
                     <MudCardContent>
+
                         <MudTextField Label="Nombre" @bind-Value="usuario.Nombre" For="@(() => usuario.Nombre)" />
                         <MudTextField Label="Apellido" @bind-Value="usuario.Apellido" For="@(() => usuario.Apellido)" />
-                        <MudTextField Label="Login" @bind-Value="usuario.Login" For="@(() => usuario.Login)" />                       
+                        <MudTextField Label="Login" @bind-Value="usuario.Login" For="@(() => usuario.Login)" />  
                         <MudSelect Variant="Variant.Outlined" Label="Estado" AnchorOrigin="Origin.BottomCenter"
-                                   @bind-Value="usuario.Estatus" For="@(() => usuario.Estatus)">
-                            <MudSelectItem Value="1">Activo</MudSelectItem>
-                            <MudSelectItem Value="2">Inactivo</MudSelectItem>
+                                   @bind-Value="usuario.Estatus" For="@(() => usuario.Estatus)">                                
+                              <MudSelectItem Value="1">Activo</MudSelectItem>
+                              <MudSelectItem Value="2">Inactivo</MudSelectItem>
 
-                        </MudSelect>
+                        </MudSelect>  
                         <MudSelect Variant="Variant.Outlined" Label="Rol" AnchorOrigin="Origin.BottomCenter"
                                    @bind-Value="usuario.IdRol" For="@(() => usuario.IdRol)">
-                            @foreach (var item in roles)
-                            {
+                            @foreach(var item in roles)
+                            {                                
                                 <MudSelectItem Value="@item.Id">@item.Nombre</MudSelectItem>
                             }
                         </MudSelect>
