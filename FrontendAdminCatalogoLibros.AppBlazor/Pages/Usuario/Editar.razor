@@ -49,7 +49,7 @@
 
     private IEnumerable<Rol>? roles = new List<Rol>();
     private bool showLeaveAlert = false;
-    Usuario? usuario = new Usuario();
+    Usuario2? usuario = new Usuario2();
 
     protected override async Task OnInitializedAsync()
     {
@@ -57,7 +57,7 @@
             new AuthenticationHeaderValue("Bearer", await _localStorageService.GetItemAsync<string>("token"));
 
         var resp = await Http.GetStringAsync("usuario/" + id);
-        usuario = JsonSerializer.Deserialize<Usuario>(resp, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+        usuario = JsonSerializer.Deserialize<Usuario2>(resp, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
         await getRoles();
     }
@@ -69,7 +69,7 @@
 
     private async Task saveChanges()
     {
-        var httpResponse = await Http.PutAsJsonAsync<Usuario>("usuario/" + usuario.Id, usuario);
+        var httpResponse = await Http.PutAsJsonAsync<Usuario2>("usuario/" + usuario.Id, usuario);
 
         if (!(httpResponse.StatusCode == System.Net.HttpStatusCode.OK))
         {
