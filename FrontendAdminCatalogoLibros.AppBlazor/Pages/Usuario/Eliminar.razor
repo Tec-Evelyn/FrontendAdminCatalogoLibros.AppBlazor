@@ -1,8 +1,119 @@
 ﻿@page "/usuario/eliminar/{id:int}"
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+@inject ILocalStorageService _localStorageService
 
-<h3>Eliminar</h3>
+@*<MudText Typo="Typo.h2" Class="ml">Eliminar Libro</MudText>
+*@
+<MudGrid>
+    <MudItem xs="12" sm="7">
+        <MudPaper Class="pa-4">
+            <EditForm Model="usuario" OnValidSubmit="OnValidSubmit">
+                <DataAnnotationsValidator />
+
+                <MudCard>
+                    <MudCardContent>
+
+                        <MudTextField Label="Nombre" @bind-Value="usuario.Nombre" For="@(() => usuario.Nombre)" />
+                        <MudTextField Label="Apellido" @bind-Value="usuario.Apellido" For="@(() => usuario.Apellido)" />
+                        <MudTextField Label="Login" @bind-Value="usuario.Login" For="@(() => usuario.Login)" />                        
+                      
+                             <MudSelect Variant="Variant.Outlined" Label="Estado" AnchorOrigin="Origin.BottomCenter"
+                                   @bind-Value="usuario.Estatus" For="@(() => usuario.Estatus)">
+                                   <MudSelectItem Value="1">Activo</MudSelectItem>
+                                   <MudSelectItem Value="2">Inactivo</MudSelectItem>
+                               
+                               </MudSelect>
+
+                         @*Relacion con llaves foranea rol*@
+                          <MudSelect Variant="Variant.Outlined" Label="Autor" AnchorOrigin="Origin.BottomCenter"
+                                   @bind-Value="usuario.IdRol" For="@(() => usuario.IdRol)">
+                            @foreach (var item in roles)
+                            {
+                                <MudSelectItem Value="@item.Id">@item.Nombre</MudSelectItem>
+                            }
+                        </MudSelect>
+
+                    </MudCardContent>
+                    <MudCardActions>
+                        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Error" Class="ml-auto">Eliminar</MudButton>
+                    </MudCardActions>
+                </MudCard>
+
+            </EditForm>
+            @if (showLeaveAlert)
+            {
+                <MudAlert Severity="Severity.Error" ContentAlignment="HorizontalAlignment.Center" ShowCloseIcon="true" CloseIconClicked="(() => CloseMe(true))">Ocurrió un problema.</MudAlert>
+            }
+        </MudPaper>
+    </MudItem>
+</MudGrid>
 
 @code {
     [Parameter]
     public int id { get; set; }
+
+    //private IEnumerable<Categoria> categorias = new List<Categoria>();
+    //private IEnumerable<Genero> generos = new List<Genero>();
+    private IEnumerable<Rol> roles = new List<Rol>();
+    private bool showLeaveAlert = false;
+    Usuario3 usuario = new Usuario3();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Http.DefaultRequestHeaders.Authorization =
+        new AuthenticationHeaderValue("Bearer", await _localStorageService.GetItemAsync<string>("token"));
+        await getRoles();
+
+        //Http.DefaultRequestHeaders.Authorization =
+        //new AuthenticationHeaderValue("Bearer", await _localStorageService.GetItemAsync<string>("token"));
+        //await getAutores();
+
+        //Http.DefaultRequestHeaders.Authorization =
+        //new AuthenticationHeaderValue("Bearer", await _localStorageService.GetItemAsync<string>("token"));
+        //await getGeneros();
+
+        var resp = await Http.GetStringAsync("usuario/" + id);
+        usuario = JsonSerializer.Deserialize<Usuario3>(resp, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+    }
+
+    private async Task OnValidSubmit(EditContext context)
+    {
+        await eliminar();
+    }
+
+    private async Task eliminar()
+    {
+        var httpResponse = await Http.DeleteAsync("usuario/" + usuario.Id);
+
+        if (!(httpResponse.StatusCode == System.Net.HttpStatusCode.OK))
+        {
+            showLeaveAlert = true;
+        }
+        else
+        {
+            NavigationManager.NavigateTo("usuario/index");
+        }
+    }
+
+    private void CloseMe(bool value)
+    {
+        showLeaveAlert = false;
+    }
+
+    //private async Task getCategorias()
+    //{
+    //    var httpResponse = await Http.GetStringAsync("categoria");
+    //    categorias = JsonSerializer.Deserialize<IEnumerable<Categoria>>(httpResponse, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+    //}
+    // private async Task getAutores()
+    //{
+    //    var httpResponse = await Http.GetStringAsync("autor");
+    //    autores = JsonSerializer.Deserialize<IEnumerable<Autor>>(httpResponse, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+    //}
+     private async Task getRoles()
+    {
+        var httpResponse = await Http.GetStringAsync("rol");
+        roles = JsonSerializer.Deserialize<IEnumerable<Rol>>(httpResponse, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+    }
 }

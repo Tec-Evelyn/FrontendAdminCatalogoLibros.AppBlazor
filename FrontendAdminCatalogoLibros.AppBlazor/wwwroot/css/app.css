@@ -10,6 +10,7 @@ h1:focus {
 
 a, .btn-link {
     color: #0071c1;
+  
 }
 
 .btn-primary {
@@ -62,4 +63,6 @@ a, .btn-link {
     .blazor-error-boundary::after {
         content: "An error has occurred."
     }
+ 
 
+   
