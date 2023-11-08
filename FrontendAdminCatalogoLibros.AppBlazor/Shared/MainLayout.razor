@@ -15,10 +15,12 @@
     <MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2">
         <NavMenu></NavMenu>
     </MudDrawer>
-    <MudMainContent Class="pa-4">
-        @Body
-    </MudMainContent>
+    <MudMainContent>
+        <MudContainer Class="pa-4">
+          @Body
+        </MudContainer>
 
+    </MudMainContent>
 </MudLayout>
 @code {
     [CascadingParameter]
