@@ -3,14 +3,15 @@
 @inject NavigationManager NavigationManager
 @inject ILocalStorageService _localStorageService
 
-<MudText Typo="Typo.h2" Class="ml">Editar Usuario</MudText>
-
+@*<MudText Typo="Typo.h2" Class="ml">Editar Usuario</MudText>
+*@
 <MudGrid>
     <MudItem xs="12" sm="7">
         <MudPaper Class="pa-4">
             <EditForm Model="usuario" OnValidSubmit="OnValidSubmit">
                 <DataAnnotationsValidator />
                 <MudCard>
+                    <h1>Editar Usuario</h1>
                     <MudCardContent>
 
                         <MudTextField Label="Nombre" @bind-Value="usuario.Nombre" For="@(() => usuario.Nombre)" />
@@ -31,7 +32,8 @@
                         </MudSelect>
                     </MudCardContent>
                     <MudCardActions>
-                        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Guardar cambios</MudButton>
+                        <MudButton id="edit" ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" class="button">Guardar cambios</MudButton>
+                        <MudButton id="regresar"  Link="@($"/usuario/index/")" Size="Size.Small" Variant="Variant.Outlined" Color="Color.Dark"  class="button">Atrás</MudButton>
                     </MudCardActions>
                 </MudCard>
             </EditForm>
@@ -92,3 +94,29 @@
         roles = JsonSerializer.Deserialize<IEnumerable<Rol>>(httpResponse, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
     }
 }
+
+<style>
+#edit{
+        background-color:green;
+        color:white;
+    }
+    #edit:hover{
+    background-color:white;
+        color:green;
+        border:2px solid green; 
+    }
+
+    #regresar{
+        background-color:orange;
+        color:white;
+        border:2px solid orange;
+        height:38px;
+    }
+    #regresar:hover{
+         background-color:white;
+        color:orange;
+    }
+    .button{
+        margin-inline:12px;
+    }
+</style>

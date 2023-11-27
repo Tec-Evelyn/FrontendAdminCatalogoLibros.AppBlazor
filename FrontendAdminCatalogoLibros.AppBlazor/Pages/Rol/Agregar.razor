@@ -2,20 +2,22 @@
 @inject HttpClient Http
 @inject NavigationManager NavigationManager
 @inject ILocalStorageService _localStorageService
+@*@inject ISnackbar Snackbar*@
 
-<MudText Typo="Typo.h2" Class="ml">Nuevo Rol</MudText>
-
+@*<MudText Typo="Typo.h2" Class="ml">Nuevo Rol</MudText>*@
 <MudGrid>
     <MudItem xs="12" sm="7">
         <MudPaper Class="pa-4">
             <EditForm Model="rol" OnValidSubmit="OnValidSubmit">
                 <DataAnnotationsValidator />
                 <MudCard>
+                    <h1>Nuevo Rol</h1>
                     <MudCardContent>
                         <MudTextField Label="Nombre" @bind-Value="rol.Nombre" For="@(() => rol.Nombre)" />                        
                     </MudCardContent>
                     <MudCardActions>
-                        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Guardar</MudButton>
+                        <MudButton  id="save" ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" class="button">Guardar</MudButton>                    
+                        <MudButton id="regresar"  Link="@($"/rol/index/")" Size="Size.Small" Variant="Variant.Outlined" Color="Color.Dark"  class="button">Atrás</MudButton>
                     </MudCardActions>
                 </MudCard>
             </EditForm>
@@ -30,6 +32,17 @@
 @code {
     private bool showLeaveAlert = false;
     Rol rol = new Rol();
+
+   
+
+    //private bool IsAlertVisible { get; set; }
+    //private async Task ShowAlert()
+    //{
+    //    IsAlertVisible = true;
+    //    await Task.Delay(3000);
+
+    //    IsAlertVisible = false;
+    //}
 
     protected override async Task OnInitializedAsync()
     {
@@ -62,4 +75,31 @@
         showLeaveAlert = false;
     }
 }
+<style>
+    #save{
+        background-color:green;
+        color:white;
+    }
+    #save:hover{
+    background-color:white;
+        color:green;
+        border:2px solid green; 
+    }
+    h1{
+        text-align:center;
+    }
+    #regresar{
+        background-color:orange;
+        color:white;
+        border:2px solid orange;
+        height:38px;
+    }
+    #regresar:hover{
+         background-color:white;
+        color:orange;
+    }
+    .button{
+        margin-inline:8px;
+    }
+</style>
 

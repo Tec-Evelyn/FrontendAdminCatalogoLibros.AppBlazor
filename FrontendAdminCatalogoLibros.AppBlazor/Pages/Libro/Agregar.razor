@@ -12,6 +12,7 @@
             <EditForm Model="libro" OnValidSubmit="OnValidSubmit">
                 <DataAnnotationsValidator />
                 <MudCard>
+                     <h1>Nuevo Libro</h1>
                     <MudCardContent>
 
                         <MudTextField Label="Nombre" @bind-Value="libro.Nombre" For="@(() => libro.Nombre)" />
@@ -47,7 +48,8 @@
                     </MudCardContent>
 
                     <MudCardActions>
-                        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Guardar</MudButton>
+                        <MudButton id="save" ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Guardar</MudButton>
+                        <MudButton id="regresar"  Link="@($"/libro/index/")" Size="Size.Small" Variant="Variant.Outlined" Color="Color.Dark"  class="button">Atrás</MudButton>
                     </MudCardActions>
                 </MudCard>
             </EditForm>
@@ -114,3 +116,32 @@
         generos = JsonSerializer.Deserialize<IEnumerable<Genero>>(httpResponse, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
     }
 }
+
+<style>
+#save{
+        background-color:green;
+        color:white;
+    }
+    #save:hover{
+    background-color:white;
+        color:green;
+        border:2px solid green; 
+    }
+    h1{
+        text-align:center;
+    }
+     #regresar{
+        background-color:orange;
+        color:white;
+        border:2px solid orange;
+        width:;
+        height:38px;
+    }
+    #regresar:hover{
+         background-color:white;
+        color:orange;
+    }
+    .button{
+        margin-inline:8px;
+    }
+</style>

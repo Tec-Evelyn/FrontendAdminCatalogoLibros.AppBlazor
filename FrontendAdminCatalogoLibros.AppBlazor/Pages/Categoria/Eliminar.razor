@@ -12,11 +12,13 @@
             <EditForm Model="categoria" OnValidSubmit="OnValidSubmit">
                 <DataAnnotationsValidator />
                 <MudCard>
+                    <h1>Eliminar Categoría</h1>
                     <MudCardContent>
                         <MudTextField Label="Nombre" @bind-Value="categoria.Nombre" For="@(() => categoria.Nombre)" />
                     </MudCardContent>
                     <MudCardActions>
-                        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Error" Class="ml-auto">Eliminar</MudButton>
+                        <MudButton id="delete" ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Error" class="button">Eliminar</MudButton>
+                        <MudButton id="regresar"  Link="@($"/categoria/index/")" Size="Size.Small" Variant="Variant.Outlined" Color="Color.Dark"  class="button">Atrás</MudButton>
                     </MudCardActions>
                 </MudCard>
             </EditForm>
@@ -67,3 +69,29 @@
         showLeaveAlert = false;
     }
 }
+
+<style>
+#delete{
+        background-color:red;
+        color:white;
+    }
+    #delete:hover{
+    background-color:white;
+        color:red;
+        border:2px solid red; 
+    }
+
+    #regresar{
+        background-color:orange;
+        color:white;
+        border:2px solid orange;
+        height:38px;
+    }
+    #regresar:hover{
+         background-color:white;
+        color:orange;
+    }
+    .button{
+        margin-inline:12px;
+    }
+</style>

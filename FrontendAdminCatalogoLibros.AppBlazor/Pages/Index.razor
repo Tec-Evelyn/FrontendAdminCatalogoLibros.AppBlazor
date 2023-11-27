@@ -5,21 +5,26 @@
 @inject ILocalStorageService _localStorageService
 @inject HttpClient Http
 
-@*<MudImage ObjectFit="ObjectFit.Contain" Src="/images/fullcolor.png" Width="200" Height="150" Alt="Swedish Farm House" Elevation="0" Class="rounded-lg ma-4" />*@
-<MudPaper Class="pa-2 ma-4" Elevation="0">
-    <EditForm Model="@user" OnValidSubmit="OnValidSubmit">
+<body>    
+        @*<MudImage ObjectFit="ObjectFit.Contain" Src="/images/fullcolor.png" Width="200" Height="150" Alt="Swedish Farm House" Elevation="0" Class="rounded-lg ma-4" />*@
+   <MudPaper Class="pa-2 ma-4" Elevation="0"> @*Class="pa-2 ma-4"*@
+   <EditForm class="box" Model="@user" OnValidSubmit="OnValidSubmit">
         <DataAnnotationsValidator /> @*Si dejo un campo vacio me dara error*@
-        <MudGrid>
+        <MudGrid>  
+            <MudText Class="ml">
+                 <h1>Inicio de Sesión</h1> 
+            </MudText>
+                                          
             <MudItem xs="12">
-                <MudTextField Label="Usuario" Class="mt-3"
-                              @bind-Value="user.Login" For="@(() => user.Login)" />
+                <MudTextField Label="Correo Electrónico" Class="mt-3"
+                              @bind-Value="user.Login" For="@(() => user.Login)" InputType="InputType.Email"/>
             </MudItem>
             <MudItem xs="12">
-                <MudTextField Label="Clave" Class="mt-3"
+                <MudTextField Label="Contraseña" Class="mt-3"
                               @bind-Value="user.Password" For="@(() => user.Password)" InputType="InputType.Password" />
             </MudItem>
             <MudItem xs="12"> @*un botón submit envia un formulario*@
-                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Login</MudButton>               
+                <MudButton id="login" ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Info" Class="ml-auto">Entrar</MudButton>               
             </MudItem>
         </MudGrid>
     </EditForm>
@@ -27,7 +32,9 @@
     {
         <MudAlert Severity="Severity.Error" ContentAlignment="HorizontalAlignment.Center" ShowCloseIcon="true" CloseIconClicked="(() => CloseMe(true))">No se reconocen las credenciales ingresadas.</MudAlert>
     }
-</MudPaper>
+   </MudPaper>
+
+</body>
 
 @code {
 
@@ -81,3 +88,57 @@
         showLeaveAlert = false;
     }
 }
+<style>
+    body{
+        margin:auto;
+        padding:0;
+        background-size:cover;
+        font-family:Arial, Helvetica, sans-serif;
+        box-sizing:border-box;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        min-height:100vh;
+        background-color:white;/*#dadce0*/
+    }
+    .box{
+        position:absolute;
+        top:50%;
+        left:50%;
+        transform: translate(-50%, -50%);/*hace que el formulario quede al centro de la página*/
+        width:22rem;
+        padding:2.5rem;
+        box-sizing:border-box;
+        border: 2px solid #000;/*#dadce0*/
+        border-radius:8px;
+        box-shadow: 0 5px 12px  rgba(0,0,0,0.5);
+    }
+    .box input{
+        width: 73%;/*ancho de los input 93%*/
+    padding: 0.625rem 10px;
+    font-size: 1rem;
+   /* letter-spacing: 0.062rem;*/
+    margin-bottom: 1.875rem;
+    border: 1px solid #000;/*color de border de los input*/
+    background: transparent;
+    border-radius: 4px;
+    }
+  
+</style>
+
+<style>
+     .mud-text{
+        display:flex;
+        justify-content:center;
+        align-items:center;
+     }
+     h1{
+         text-align:center;
+     }
+     #login{
+         width:100%;
+         text-align:center;
+         background-color:black;
+     }
+   
+</style>

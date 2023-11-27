@@ -13,7 +13,7 @@
 <MudTable  Items="@categorias" Dense="true" Hover="true" Bordered="true" Striped="true">
 
      <ToolBarContent>
-        <MudFab Color="Color.Info" StartIcon="@Icons.Material.Filled.Add" OnClick="goAdd" />
+        <MudFab id="nuevo" Color="Color.Info" StartIcon="@Icons.Material.Filled.Add" OnClick="goAdd" />
         <MudSpacer />
         <MudTextField @bind-Value="searchText" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
     </ToolBarContent>
@@ -29,9 +29,9 @@
         <MudTd DataLabel="Nombre">@context.Nombre</MudTd>
 
         <MudTd>
-            <MudButton Link="@($"/categoria/editar/{context.Id}")" Size="Size.Small" Variant="Variant.Outlined" Color="Color.Dark"
+            <MudButton id="editar" Link="@($"/categoria/editar/{context.Id}")" Size="Size.Small" Variant="Variant.Outlined" Color="Color.Dark"
                        Class="text-center">Editar</MudButton>
-            <MudButton Link="@($"/categoria/eliminar/{context.Id}")" Size="Size.Small" Variant="Variant.Outlined" Color="Color.Error"
+            <MudButton id="eliminar" Link="@($"/categoria/eliminar/{context.Id}")" Size="Size.Small" Variant="Variant.Outlined" Color="Color.Error"
                        Class="text-center">Eliminar</MudButton>
         </MudTd>
 
@@ -69,5 +69,31 @@
 <style>
     h1{
         text-align:center;
+    }
+     #nuevo{
+        background-color:#252850;
+    }
+    #nuevo:hover{
+         background-color:white;
+         color:#252850;
+         border:2px solid rgba(0, 0, 0, 0.9);
+    }
+    #editar{
+        background-color:blue;
+        color:white;
+        border:2px solid blue;
+    }
+    #editar:hover{
+        background-color: white;
+        color:blue;
+    }
+     #eliminar{
+         background-color:red;
+        color:white;
+        border:2px solid red;
+    }
+    #eliminar:hover{
+        background-color:white;
+        color:red;
     }
 </style>

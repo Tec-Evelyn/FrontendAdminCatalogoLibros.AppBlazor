@@ -3,19 +3,22 @@
 @inject NavigationManager NavigationManager
 @inject ILocalStorageService _localStorageService
 
-<MudText Typo="Typo.h2" Class="ml">Nuevo Genero</MudText>
-
+@*<MudText Typo="Typo.h2" Class="ml">Nuevo Genero</MudText>
+*@
 <MudGrid>
     <MudItem xs="12" sm="7">
         <MudPaper Class="pa-4">
             <EditForm Model="genero" OnValidSubmit="OnValidSubmit">
                 <DataAnnotationsValidator />
                 <MudCard>
+                    <h1>Nuevo Género</h1>
                     <MudCardContent>
                         <MudTextField Label="Nombre" @bind-Value="genero.Nombre" For="@(() => genero.Nombre)" />                        
                     </MudCardContent>
                     <MudCardActions>
-                        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Guardar</MudButton>
+                        <MudButton id="save" ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Guardar</MudButton>
+                                                <MudButton id="regresar"  Link="@($"/genero/index/")" Size="Size.Small" Variant="Variant.Outlined" Color="Color.Dark"  class="button">Atrás</MudButton>
+
                     </MudCardActions>
                 </MudCard>
             </EditForm>
@@ -62,3 +65,31 @@
         showLeaveAlert = false;
     }
 }
+
+<style>
+#save{
+        background-color:green;
+        color:white;
+    }
+    #save:hover{
+    background-color:white;
+        color:green;
+        border:2px solid green; 
+    }
+    h1{
+        text-align:center;
+    }
+    #regresar{
+        background-color:orange;
+        color:white;
+        border:2px solid orange;
+        height:38px;
+    }
+    #regresar:hover{
+         background-color:white;
+        color:orange;
+    }
+    .button{
+        margin-inline:8px;
+    }
+</style>

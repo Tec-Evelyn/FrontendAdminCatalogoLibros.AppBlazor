@@ -14,12 +14,15 @@
                 <DataAnnotationsValidator />
 
                 <MudCard>
-
+                    <h1>Nuevo Categoría</h1>
                     <MudCardContent>
                         <MudTextField Label="Nombre" @bind-Value="categoria.Nombre" For="@(() => categoria.Nombre)" />                        
                     </MudCardContent>
                     <MudCardActions>
-                        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Guardar</MudButton>
+                        
+                      <MudButton id="save" ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Guardar</MudButton>
+                                              <MudButton id="regresar"  Link="@($"/categoria/index/")" Size="Size.Small" Variant="Variant.Outlined" Color="Color.Dark"  class="button">Atrás</MudButton>
+
                     </MudCardActions>
 
                 </MudCard>
@@ -67,3 +70,31 @@
         showLeaveAlert = false;
     }
 }
+
+<style>
+ #save{
+        background-color:green;
+        color:white;
+    }
+    #save:hover{
+    background-color:white;
+        color:green;
+        border:2px solid green; 
+    }
+    h1{
+        text-align:center;
+    }
+    #regresar{
+        background-color:orange;
+        color:white;
+        border:2px solid orange;
+        height:38px;
+    }
+    #regresar:hover{
+         background-color:white;
+        color:orange;
+    }
+    .button{
+        margin-inline:8px;
+    }
+</style>

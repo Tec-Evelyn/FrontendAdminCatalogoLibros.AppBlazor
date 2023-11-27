@@ -3,12 +3,14 @@
 @inject NavigationManager NavigationManager
 @inject ILocalStorageService _localStorageService
 
-@*<MudText Typo="Typo.h2" Class="ml">Autores</MudText>
-*@
-<h1>Mantenimiento de Autores</h1>
-<MudTable Items="@autores" Dense="true" Hover="true" Bordered="true" Striped="true">
+<MudText Class="ml">
+    <h1>Mantenimiento de Autores</h1>
+</MudText>
+
+@*<h1>Mantenimiento de Autores</h1>
+*@<MudTable Items="@autores" Dense="true" Hover="true" Bordered="true" Striped="true">
     <ToolBarContent>
-        <MudFab Color="Color.Info" StartIcon="@Icons.Material.Filled.Add" OnClick="goAdd" />
+        <MudFab id="nuevo" Color="Color.Info" StartIcon="@Icons.Material.Filled.Add" OnClick="goAdd" />
         <MudSpacer />
         <MudTextField @bind-Value="searchText" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
     </ToolBarContent>
@@ -21,9 +23,9 @@
         <MudTd DataLabel="Id">@context.Id</MudTd>
         <MudTd DataLabel="Nombre">@context.Nombre</MudTd>
         <MudTd>
-            <MudButton Link="@($"/autor/editar/{context.Id}")" Size="Size.Small" Variant="Variant.Outlined" Color="Color.Dark"
+            <MudButton id="editar" Link="@($"/autor/editar/{context.Id}")" Size="Size.Small" Variant="Variant.Outlined" Color="Color.Dark"
                        Class="text-center">Editar</MudButton>
-            <MudButton Link="@($"/autor/eliminar/{context.Id}")" Size="Size.Small" Variant="Variant.Outlined" Color="Color.Error"
+            <MudButton id="eliminar" Link="@($"/autor/eliminar/{context.Id}")" Size="Size.Small" Variant="Variant.Outlined" Color="Color.Error"
                        Class="text-center">Eliminar</MudButton>
         </MudTd>
     </RowTemplate>
@@ -56,6 +58,32 @@
 }
 <style>
     h1{
-        text-align:center;
+       text-align:center;     
+   }
+   #nuevo{
+        background-color:#252850;
+    }
+    #nuevo:hover{
+         background-color:white;
+         color:#252850;
+         border:2px solid rgba(0, 0, 0, 0.9);
+    }
+    #editar{
+        background-color:blue;
+        color:white;
+        border:2px solid blue;
+    }
+    #editar:hover{
+        background-color: white;
+        color:blue;
+    }
+     #eliminar{
+         background-color:red;
+        color:white;
+        border:2px solid red;
+    }
+    #eliminar:hover{
+        background-color:white;
+        color:red;
     }
 </style>
