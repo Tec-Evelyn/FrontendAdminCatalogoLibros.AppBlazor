@@ -3,20 +3,10 @@
 @inject HttpClient httpClient
 @inject NavigationManager NavigationManager
 @inject ILocalStorageService _localStorageService
-@*/libro/agregar*@
-@*<MudIcon Icon="@Icons.Material.Filled"/>
-*@
 
-@*<form>
-<div class="contenedor" style="position: relative;">
-<MudIcon class="icono" Icon="@Icons.Material.Filled.Person" style="font-size: 15rem; background-color:white; border:2px solid #000; border-radius:130px;" Color="Color.Info"/>
-<h1 style="position: absolute; bottom:0;">Nuevo Usuario</h1>
+<div class="center">
+    <h1>ADMINISTRACIÓN DEL SISITEMA</h1>
 </div>
-<div class="contenedor" style="position: relative;">
-<MudIcon class="icono" Icon="@Icons.Material.Filled.BookmarkAdd" style="font-size: 15rem; background-color:white; border:2px solid #000; border-radius:130px;" Color="Color.Info"/>
-<h1 style="position: absolute; bottom:0;">Nuevo Libro</h1>
-</div>
-</form>*@
 
 @code {
     
@@ -24,30 +14,26 @@ private void goAdd()
     {
         NavigationManager.NavigateTo("libro/agregar");
     }
-    
-
-   
-    
 }
-@*<style>
-.icono{
-    box-shadow: 2px 4px 22px rgba(0,0,0,0.9);
-   transition:1s;
-   margin-inline:70px;
-}
-.icono:hover{
-     transform:scale(1.1);
-     transition:1s;
-     cursor:pointer;
-}
-.contenedor{
+<style>
+.center{
     display:flex;
-   justify-content:center;
-   align-items:center;
-   min-height:70vh;
-}
-form{
-    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+    background-color:white;
+    border: solid 3px blue;
+    height:120px;
+    width:50%;
+    margin-left:20%;
+    margin-top:10%;
+    box-shadow: 0 5px 12px  rgba(0,0,0,0.6);
+    border-radius:6px;
 }
 
-</style>*@
+h1{
+    color:blue;
+    font-size:1.8rem;
+}
+
+</style>
